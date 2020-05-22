@@ -51,50 +51,10 @@
 
 <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
         <div class="wrapper wrapper--w680">
-            <div class="card card-4">
-                <div class="card-body">
+{% block content %}
 
-    {% if input %}
-            <h1>Enter your Sympy Expression</h1>
-            <form action="" method="POST">
-            {% csrf_token %}
-                <input type="text" name="input"  autocapitalize="off"  id="id_i">
-                <input class="input_field" type="submit" value="submit" />
-            </form>
-
-
-
-    {% else %}
-
-            <h1>Enter your Sympy Expression</h1>
-              <form action="" method="POST">
-              {% csrf_token %}
-                <input type="text" name="input"  autocapitalize="off" id="id_i">
-                <input class="input_field" type="submit" value="submit" />
-            </form>
-        <br>
-
-                <div class="card-body">
-
-       <h3>Sympy:</h3>
-                    <br>
-                    <h4>Given Input: {{ expression|safe  }}</h4>
-                    <br>
-                    <h4>Steps:</h4>
-<br>
-                     {{latex|safe}}
-                </div>
-<br>
-
-{% endif %}
-
-            <center><div class="foot">
-                    Made by Clement Adriean A A
-            </div></center>
+{% endblock %}
+        </div>
 </div>
-</div>
-</div>
-</div>
-
 </body>
 </html>

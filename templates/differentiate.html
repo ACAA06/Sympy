@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+            <div class="card card-4">
+                <div class="card-body">
+
+    {% if input %}
+        <center><h1>Derivate</h1></center>
+            <form action="/derivate" method="POST">
+            {% csrf_token %}
+                    <h3>Enter the Expression</h3>
+                <input class="input_field" type="text" name="input1"  autocapitalize="off" id="id_i">
+                  <br>
+                  <h3>Enter the variable on which you want to derivate</h3>
+                  <input class="input_field" type="text" name="input2"  autocapitalize="off" id="id_i">
+                <input class="input_field" type="submit" value="submit" />
+            </form>
+
+
+
+    {% else %}
+       <center> <h1>Derivate</h1></center>
+              <form action="/derivate" method="POST">
+              {% csrf_token %}
+                  <h3>Enter the Expression</h3>
+                <input type="text" class="input_field" name="input1"  autocapitalize="off" id="id_i">
+                  <br>
+                  <h3>Enter the variable on which you want to derivate</h3>
+                  <input type="text" class="input_field" name="input2"  autocapitalize="off" id="id_i">
+                <input class="input_field" type="submit" value="submit" />
+            </form>
+        <br>
+                <div class="card-body">
+
+       <h3>Sympy:</h3>
+                    <br>
+                    <h4>Given Input: {{ expression|safe  }}</h4>
+                    <br>
+                    <h4>Steps:</h4>
+<br>
+                     {{latex|safe}}
+                </div>
+<br>
+
+{% endif %}
+
+            <center><div class="foot">
+                    Made by Clement Adriean A A
+            </div></center>
+</div>
+</div>
+
+{% endblock %}

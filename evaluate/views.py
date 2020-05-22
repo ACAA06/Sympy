@@ -1,41 +1,68 @@
 from django.shortcuts import render,redirect
 import requests
-import latex2mathml.converter
-import html2text
-from bs4 import BeautifulSoup
-import re
+from django.http import HttpResponseForbidden
 
-#from logic.logic import SymPyGamma
 # Create your views here.
 #http://ravigitte.pythonanywhere.com/solve/?exp=integrate(2*x%20+%20y,x)
-def input(request):
+def contents(request):
+    return render(request,'contents.html')
+
+def integrate(request):
     if(request.method=='GET'):
-        return render(request,'input.html',{'input':True})
+        return render(request, 'integrate.html', {'input':True})
     elif(request.method=='POST'):
-        input=request.POST['input']
-        URL = "http://ravigitte.pythonanywhere.com/solve"
-        PARAMS = {'exp': input}
-        #print(PARAMS)
-        r = requests.get(url=URL, params=PARAMS)
-        #print(r)
-        data = r.json()
-        #print(len(data))
-        #print(data)
-        expression = data[0]['input']
+        input1=request.POST['input1']
+        input2 = request.POST['input2']
+        try:
+            URL = "http://ravigitte.pythonanywhere.com/solve"
+            PARAMS = {'exp': 'integrate('+input1+','+input2+')'}
+           # print(PARAMS)
+            r = requests.get(url=URL, params=PARAMS)
+            #print(r)
+            data = r.json()
+            print(len(data))
+            print(data)
+            expression = data[0]['input']
+            htmltxt=''
+            if(len(data)>2):
+                for i in data:
+                    if i['title']=='Integrate Steps':
+                        htmltxt = i['output']
+            elif(data[1]['title']=='Error'):
+                htmltxt = data[1]['error']
+            else:
+                htmltxt = data[1]['output']
 
-        if(len(data)>2):
-            for i in data:
-                if i['title']=='Integral Steps':
-                    htmltxt = i['output']
-        elif(data[1]['title']=='Error'):
-            htmltxt = data[1]['error']
-        else:
-            htmltxt = data[1]['output']
-
-    #print(data[0]['output'])
-        #htmltxt=data[1]['output']
-        #print(htmltxt)
-        html= render(request, 'input.html', {'input': False,'latex': htmltxt,'expression':expression})
-        return html
+            html= render(request, 'integrate.html', {'input': False, 'latex': htmltxt, 'expression':expression})
+            return html
+        except:
+            return HttpResponseForbidden('500 Internal Server Error', content_type='text/html')
 
 
+def differentiate(request):
+    if(request.method=='GET'):
+        return render(request, 'differentiate.html', {'input':True})
+    elif(request.method=='POST'):
+        input1=request.POST['input1']
+        input2=request.POST['input2']
+        try:
+            URL = "http://ravigitte.pythonanywhere.com/solve"
+            PARAMS = {'exp': 'diff('+input1+','+input2+')'}
+            r=requests.get(url=URL, params=PARAMS)
+            print(r)
+            data = r.json()
+            print(len(data))
+            print(data)
+            expression = data[0]['input']
+            htmltxt=''
+            if(len(data)>2):
+                for i in data:
+                    if i['title']=='Derivative Steps':
+                        htmltxt = i['output']
+            elif(data[1]['title']=='Error'):
+                htmltxt = data[1]['error']
+            else:
+                htmltxt = data[1]['output']
+            return render(request, 'differentiate.html', {'input': False, 'latex': htmltxt, 'expression':expression})
+        except:
+            return HttpResponseForbidden('500 Internal Server Error', content_type='text/html')
