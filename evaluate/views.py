@@ -2,8 +2,7 @@ from django.shortcuts import render,redirect
 import requests
 from django.http import HttpResponseForbidden
 
-# Create your views here.
-#http://ravigitte.pythonanywhere.com/solve/?exp=integrate(2*x%20+%20y,x)
+
 def contents(request):
     return render(request,'contents.html')
 
@@ -37,7 +36,6 @@ def integrate(request):
             return html
         except:
             return HttpResponseForbidden('500 Internal Server Error', content_type='text/html')
-
 
 def differentiate(request):
     if(request.method=='GET'):
