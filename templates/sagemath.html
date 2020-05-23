@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if input %}
+        <h3>Enter SageMath code</h3>
+        <br>
+        <form action="/sagemath" method="POST">
+            {% csrf_token %}
+            <textarea name="input" cols="40" rows="5">{{ textarea }}</textarea>
+            <br>
+            <input class="input_field" type="submit" value="submit" />
+            </form>
+         <div class="card-body">
+
+       <h3>Output :</h3>
+<br>
+                     {{output|safe}}
+                </div>
+<br>
+        {% else %}
+    <h3>Enter SageMath code</h3>
+        <br>
+        <form action="/sagemath" method="POST">
+            {% csrf_token %}
+            <textarea name="input" cols="40" rows="5"></textarea>
+            <br>
+            <input class="input_field" type="submit" value="submit" />
+            </form>
+
+    {% endif %}
+{% endblock %}

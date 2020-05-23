@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 import requests
 from django.http import HttpResponseForbidden
-
+import urllib
 
 def contents(request):
     return render(request,'contents.html')
@@ -64,3 +64,26 @@ def differentiate(request):
             return render(request, 'differentiate.html', {'input': False, 'latex': htmltxt, 'expression':expression})
         except:
             return HttpResponseForbidden('500 Internal Server Error', content_type='text/html')
+
+def sagemath(request):
+    if request.method=='GET':
+        return render(request,'sagemath.html',{'input':False})
+    else:
+        input=request.POST['input']
+        print(input)
+
+        url = 'https://sagecell.sagemath.org/service'
+        #print(urllib.parse.quote(input, safe='~()*!.\''))
+
+        myobj = {'code': input}
+        print(myobj)
+        try:
+            x = requests.post(url, data=myobj)
+            data = x.json()
+            #print(data['success'])
+            if data['success']==True:
+                return render(request, 'sagemath.html', {'input': True,'output': data['stdout'],'textarea':input})
+            else:
+                return HttpResponseForbidden(x, content_type='text/html')
+        except:
+            return HttpResponseForbidden(x, content_type='text/html')
